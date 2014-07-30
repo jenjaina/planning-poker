@@ -12,13 +12,13 @@
     <h1 class="text-center">JRS Planning Poker</h1>
 
     <div id="namePanel" class="panel">
-        <h3>Welcome, {{name}}!</h3>
-        <form name="userForm" novalidate ng-submit="addUser(newUser)" ng-show="name == 'Guest'">
+        <h3 ng-show="newUser.name">Welcome, {{newUser.name}}!</h3>
+        <form name="userForm" novalidate ng-show="true">
             <div class="well">
                 <div class="form-group">
                     <label>Enter your name:</label>
                     <input name="userName" type="text" required ng-model="newUser.name" />
-                    <button type="submit" ng-disabled="userForm.$invalid">Submit</button>
+                    <!--<button type="submit" ng-disabled="userForm.$invalid">Submit</button>-->
                 </div>
             </div>
         </form>

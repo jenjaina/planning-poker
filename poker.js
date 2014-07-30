@@ -6,17 +6,10 @@ var app = angular.module("PokerApp", []);
 app.controller("MainCtrl", function ($scope) {
     $scope.cardchoices = model;
     $scope.cardoptions = cards;
-    $scope.name = "Guest";
     $scope.data = {
         togglestart: true,
         tasknum: 0
     };
-
-    $scope.addUser = function (newUser) {
-        if (angular.isDefined(newUser) && angular.isDefined(newUser.name)) {
-            $scope.name = newUser.name;
-        }
-    }
 
     $scope.addTask = function (newTask) {
         if (angular.isDefined(newTask) && angular.isDefined(newTask.projectDescription)) {
