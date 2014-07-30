@@ -25,15 +25,15 @@
     </div>
 
     <div id="formPanel" class="panel">
-        <form name="estimateForm" novalidate>
+        <form name="estimateForm" novalidate ng-submit="addTask(newTask)">
             <div class="well">
                 <div class="form-group">
                     <label>Task: </label>
                     <textarea name="project" cols="40" rows="5" class="form-control"
-                              ng-model="projectDescription"></textarea>
+                              ng-model="newTask.projectDescription"></textarea>
                 </div>
                 <span class="input-group-btn">
-                    <button class="btn btn-default" type="button"
+                    <button class="btn btn-default" type="submit"
                             ng-click="data.togglestart = true">
                         Start
                     </button>
@@ -67,18 +67,16 @@
 
     </div>
 
-
-
     <div id="cardsPanel" ng-hide="data.togglestart" class="panel" style="background-color: lightblue">
         <h3 class="panel-header">
             The Votes Are In...
             <span class="label label-info">
-                {{ cardchoices.choices.length }} Votes
+                {{ cardchoices[data.tasknum].choices.length }} Votes
             </span>
         </h3>
         
         <div class="row">
-            <div class="col-xs-3" ng-repeat="choice in cardchoices.choices">
+            <div class="col-xs-3" ng-repeat="choice in cardchoices[data.tasknum].choices">
                 <div class="well">
                     {{choice.user}}
                     <h4>{{choice.card}}</h4>
