@@ -12,17 +12,29 @@ var express = require('express'),
 //});
 
 io.sockets.on('connection', function(socket) {
-    socket.on('createCard', function(data) {
+    socket.on('createCard', function (data) {
         socket.broadcast.emit('onCardCreated', data);
     });
     
-    socket.on('deleteCards', function(){
+    socket.on('deleteCards', function () {
         socket.broadcast.emit('onCardsDeleted');
     });
 
     socket.on('onToggle', function (val) {
         socket.broadcast.emit('onToggle', val);
     });
+
+    socket.on('onTaskChanged', function (val) {
+        socket.broadcast.emit('onTaskChanged', val);
+    });
+
+    socket.on('setLeader', function () {
+        socket.broadcast.emit('onLeaderSet');
+    });
+
+    socket.on('resetLeader', function () {
+        socket.broadcast.emit('onLeaderReset');
+    })
 });
      
 // A.3

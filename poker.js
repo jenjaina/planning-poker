@@ -9,20 +9,14 @@ app.controller("MainCtrl", function ($scope, socket) {
     $scope.cardchoices = [];
     $scope.cardoptions = cards;
     $scope.params = {
+        currenttask: "",
         togglestart: true,
+        leaderchosen: false,
+        leader: false
     };
 
     // Incoming
     socket.on('onCardCreated', function (data) { // B.3
-        // Update if the same card. 
-        for (var i = 0; i < $scope.cardchoices.length; i++) {
-            if (data.name == $scope.cardchoices[i].name) {
-                $scope.cardchoices.task = data.task;
-                $scope.cardchoices.card = data.card;
-                return true;
-            }
-        }
-
         $scope.cardchoices.push(data);
     });
 
@@ -33,19 +27,22 @@ app.controller("MainCtrl", function ($scope, socket) {
 
     socket.on('onToggle', function (val) {
         $scope.params.togglestart = val;
+    });
+
+    socket.on('onTaskChanged', function (val) {
+        $scope.params.currenttask = val;
+    });
+
+    socket.on('onLeaderSet', function () {
+        $scope.params.leaderchosen = true;
+    });
+
+    socket.on('onLeaderReset', function () {
+        $scope.params.leaderchosen = false;
     })
     
     // Outgoing
     $scope.createCard = function(data) { // B.4
-        // Update if the same card
-        for (var i = 0; i < $scope.cardchoices.length; i++) {
-            if (data.name == $scope.cardchoices[i].name) {
-                $scope.cardchoices.task = data.task;
-                $scope.cardchoices.card = data.card;
-                return true;
-            }
-        }
-
         $scope.cardchoices.push(data);
         $scope.showMessage = true;
         socket.emit('createCard', data);
@@ -60,7 +57,24 @@ app.controller("MainCtrl", function ($scope, socket) {
     $scope.toggle = function (val) {
         $scope.params.togglestart = val;
         socket.emit('onToggle', val);
-    }
+    };
+
+    $scope.changeTask = function (data) {
+        $scope.params.currenttask = data;
+        socket.emit('onTaskChanged', data);
+    };
+
+    $scope.setLeader = function () {
+        $scope.params.leader = true;
+        $scope.params.leaderchosen = true;
+        socket.emit('setLeader');
+    };
+
+    $scope.resetLeader = function () {
+        $scope.params.leader = false;
+        $scope.params.leaderchosen = false;
+        socket.emit('resetLeader');
+    };
 });
 
 app.factory('socket', function ($rootScope) {
