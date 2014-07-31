@@ -7,19 +7,15 @@ var express = require('express'),
     io = require('socket.io').listen(server);
      
 // A.2
-app.configure(function() {
+// app.configure(function() {
     app.use(express.static(__dirname)); // + '/public'));
-});
+//});
 
 io.sockets.on('connection', function(socket) {
     socket.on('createCard', function(data) {
         socket.broadcast.emit('onCardCreated', data);
     });
-     
-    socket.on('updateCard', function(data) {
-        socket.broadcast.emit('onCardUpdated', data);
-    });
-     
+    
     socket.on('deleteCards', function(){
         socket.broadcast.emit('onCardsDeleted');
     });
