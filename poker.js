@@ -84,35 +84,6 @@ app.factory('socket', function ($rootScope) {
     };
 });
 
-app.directive('pokercards', function (socket) {
-    var controller = function ($scope) {
-        // Incoming
-        socket.on('onCardUpdated', function (data) {
-            // Update if the same note
-            if (data.name == $scope.cardchoices.name) {
-                $scope.cardchoices.task = data.task;
-                $scope.cardchoices.card = data.card;
-            }
-        });
 
-        // Outgoing
-        $scope.updateCard = function (card) {
-            socket.emit('updateCard', card);
-        };
-
-        $scope.deleteCards = function () {
-            $scope.ondelete({  });
-        };
-    };
-
-    return {
-        restrict: 'A',
-        controller: controller,
-        scope: {
-            card: '=',
-            ondelete: '&'
-        }
-    };
-});
 
 // })();
