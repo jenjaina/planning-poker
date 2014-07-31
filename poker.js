@@ -3,7 +3,7 @@
 
 var cards = [0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100, "?", "coffee cup"];
 
-var app = angular.module("PokerApp", []);
+var app = angular.module("PokerApp", ["socketService"]);
 
 app.controller("MainCtrl", function ($scope, socket) {
     $scope.cardchoices = [];
@@ -16,7 +16,7 @@ app.controller("MainCtrl", function ($scope, socket) {
     };
 
     // Incoming
-    socket.on('onCardCreated', function (data) { // B.3
+    socket.on('onCardCreated', function (data) {
         $scope.cardchoices.push(data);
     });
 
@@ -42,7 +42,7 @@ app.controller("MainCtrl", function ($scope, socket) {
     })
     
     // Outgoing
-    $scope.createCard = function(data) { // B.4
+    $scope.createCard = function(data) {
         $scope.cardchoices.push(data);
         $scope.showMessage = true;
         socket.emit('createCard', data);
@@ -76,31 +76,5 @@ app.controller("MainCtrl", function ($scope, socket) {
         socket.emit('resetLeader');
     };
 });
-
-app.factory('socket', function ($rootScope) {
-    var socket = io.connect();
-    return {
-        on: function (eventName, callback) {
-            socket.on(eventName, function () {
-                var args = arguments;
-                $rootScope.$apply(function () {
-                    callback.apply(socket, args);
-                });
-            });
-        },
-        emit: function (eventName, data, callback) {
-            socket.emit(eventName, data, function () {
-                var args = arguments;
-                $rootScope.$apply(function () {
-                    if (callback) {
-                        callback.apply(socket, args);
-                    }
-                });
-            });
-        }
-    };
-});
-
-
 
 // })();

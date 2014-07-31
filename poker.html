@@ -6,6 +6,7 @@
     <script src="http://localhost:1337/socket.io/socket.io.js"></script>
     <script src="angular.js"></script>
     <script src="app.js"></script>
+    <script src="service.js"></script>
     <script src="poker.js"></script>
     <link href="bootstrap.css" rel="stylesheet" />
     <link href="bootstrap-theme.css" rel="stylesheet" />
@@ -52,11 +53,11 @@
                         <button class="btn btn-info" ng-click="changeTask(newtask)">
                             Change Task
                         </button>
-                        <button class="btn btn-default pull-right" type="button"
+                        <button class="btn btn-success pull-right" type="button"
                                 ng-click="toggle(false)">
                             Reveal
                         </button>
-                        <button class="btn btn-default pull-right" type="submit"
+                        <button class="btn btn-success pull-right" type="submit"
                                 ng-click="toggle(true)">
                             Start
                         </button>
