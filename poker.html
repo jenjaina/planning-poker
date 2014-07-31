@@ -54,20 +54,20 @@
 
 
             <div class="well">
-                <form name="cardform" novalidate>
+                <form name="cardform" novalidate ng-submit="createCard(data)"
+                      ng-class="showMessage ? 'validate' : ''">
                     <div class="form-group">
                         <label for="cardSelection">Your Estimate: </label>
                         <select id="cardSelection" ng-model="data.card"
                                 ng-options="card for card in cardoptions">
                             <option value="">(Pick One)</option>
                         </select>
+                        <p class="pull-right">You've selected: {{data.card || "None"}}</p>
                     </div>
-                    <button id="createButton" class="btn btn-primary"
-                            type="submit" ng-click="createCard(data)">
+                    <button id="createButton" class="btn btn-primary" type="submit">
                         Submit Your Estimate
                     </button>
-
-                    <p class="pull-right">You've selected: {{data.card || "None"}}</p>
+                    <p class="error" style="color: darkgreen" ng-show="showMessage">Submitted!</p>
                 </form>
             </div>
         </div>
@@ -78,7 +78,7 @@
             <div class="panel-heading">
                 <h3>
                     The Votes Are In... 
-                    <span class="badge">
+                    <span class="label label-primary pull-right">
                         {{ cardchoices.length }} Votes
                     </span>
                 </h3>

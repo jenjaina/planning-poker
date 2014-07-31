@@ -28,6 +28,7 @@ app.controller("MainCtrl", function ($scope, socket) {
 
     socket.on('onCardsDeleted', function () {
         $scope.cardchoices = [];
+        $scope.showMessage = false;
     });
 
     socket.on('onToggle', function (val) {
@@ -46,11 +47,13 @@ app.controller("MainCtrl", function ($scope, socket) {
         }
 
         $scope.cardchoices.push(data);
+        $scope.showMessage = true;
         socket.emit('createCard', data);
     };
 
     $scope.deleteCards = function () {
         $scope.cardchoices = [];
+        $scope.showMessage = false;
         socket.emit('deleteCards');
     };
 
