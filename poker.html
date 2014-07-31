@@ -11,82 +11,94 @@
     <link href="bootstrap-theme.css" rel="stylesheet" />
 </head>
 <body ng-controller="MainCtrl">
-    <h1 class="text-center">JRS Planning Poker</h1>
-
-    <div id="namePanel" class="panel">
-        <h3 ng-show="newUser.name">Welcome, {{newUser.name}}!</h3>
-        <form name="userForm" novalidate ng-show="true">
-            <div class="well">
-                <div class="form-group">
-                    <label>Enter your name:</label>
-                    <input name="userName" type="text" required ng-model="newUser.name" />
-                    <!--<button type="submit" ng-disabled="userForm.$invalid">Submit</button>-->
-                </div>
-            </div>
-        </form>
+    <div class="jumbotron">
+        <h1 class="text-center">JRS Planning Poker</h1>
     </div>
 
-    <div id="formPanel" class="panel">
-        <form name="estimateForm" novalidate ng-submit="addTask(newTask)">
-            <div class="well">
-                <div class="form-group">
-                    <label>Task: </label>
-                    <textarea name="project" cols="40" rows="5" class="form-control"
-                              ng-model="newTask.projectDescription"></textarea>
-                </div>
-                <span class="input-group-btn">
-                    <button class="btn btn-default" type="submit"
-                            ng-click="data.togglestart = true">
-                        Start
-                    </button>
-                    <button class="btn btn-default" type="button"
-                            ng-click="data.togglestart = false">
-                        Reveal
-                    </button>
-                </span>
+    <div id="dataSubmissions" class="col-xs-5">
+        <div id="namePanel" class="panel panel-default">
+            <div class="panel-heading">
+                <h3 ng-hide="data.name">Welcome!</h3>
+                <h3 ng-show="data.name">Welcome, {{data.name}}!</h3>
             </div>
-        </form>
-
-
-        <form name="cardform" novalidate>
-            <div class="well">
-                <div class="form-group">
-                    <label for="cardSelection">Your Estimate:</label>
-                    <select id="cardSelection" ng-model="newCard.selectCard"
-                            ng-options="card for card in cardoptions">
-                        <option value="">(Pick One)</option>
-                    </select>
-                </div>
-                <button class="btn btn-primary" type="submit" ng-click="addCard(newUser, newcard)">
-                    <!--"createCard()">-->
-                    Submit Your Estimate
-                </button>
-            </div>
-
-            <div class="well">
-                <p>You've selected: {{newCard.selectCard || "None"}}</p>
-            </div>
-        </form>
-
-    </div>
-
-    <div id="cardsPanel" ng-hide="data.togglestart" class="panel" style="background-color: lightblue">
-        <h3 class="panel-header">
-            The Votes Are In...
-            <span class="label label-info">
-                {{ cardchoices[data.tasknum].choices.length }} Votes
-            </span>
-        </h3>
-        
-        <div class="row">
-            <div class="col-xs-3" ng-repeat="choice in cardchoices[data.tasknum].choices">
+            <form name="userForm" novalidate ng-show="true">
                 <div class="well">
-                    {{choice.user}}
-                    <h4>{{choice.card}}</h4>
+                    <div class="form-group">
+                        <label>Enter your name: </label>
+                        <input name="userName" type="text" required ng-model="data.name" />
+                        <!--<button type="submit" ng-disabled="userForm.$invalid">Submit</button>-->
+                    </div>
                 </div>
+            </form>
+        </div>
+
+        <div id="formPanel" class="panel">
+            <form name="estimateForm" novalidate ng-submit="deleteCards()">
+                <div class="well">
+                    <div class="form-group">
+                        <label>Task: </label>
+                        <textarea name="project" cols="40" rows="5" class="form-control"
+                                  ng-model="data.task"></textarea>
+                    </div>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit"
+                                ng-click="toggle(true)">
+                            Start
+                        </button>
+                        <button class="btn btn-default" type="button"
+                                ng-click="toggle(false)">
+                            Reveal
+                        </button>
+                    </span>
+                </div>
+            </form>
+
+
+            <div class="well">
+                <form name="cardform" novalidate>
+                    <div class="form-group">
+                        <label for="cardSelection">Your Estimate: </label>
+                        <select id="cardSelection" ng-model="data.card"
+                                ng-options="card for card in cardoptions">
+                            <option value="">(Pick One)</option>
+                        </select>
+                    </div>
+                    <button id="createButton" class="btn btn-primary"
+                            type="submit" ng-click="createCard(data)">
+                        Submit Your Estimate
+                    </button>
+
+                    <p class="pull-right">You've selected: {{data.card || "None"}}</p>
+                </form>
             </div>
         </div>
     </div>
 
+    <div id="cardsPanel" class="col-xs-7">
+        <div class="panel panel-default" ng-hide="params.togglestart">
+            <div class="panel-heading">
+                <h3>
+                    The Votes Are In... 
+                    <span class="badge">
+                        {{ cardchoices.length }} Votes
+                    </span>
+                </h3>
+            </div>
+        </div>
+
+
+        <div class="row" ng-hide="params.togglestart">
+            <div class="col-xs-3" ng-repeat="choice in cardchoices">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">{{choice.name}}</h4>
+                    </div>
+                    <div class="panel-body">
+                        <h3 class="">{{choice.card}}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

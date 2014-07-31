@@ -20,8 +20,12 @@ io.sockets.on('connection', function(socket) {
         socket.broadcast.emit('onCardUpdated', data);
     });
      
-    socket.on('deleteCard', function(data){
-        socket.broadcast.emit('onCardDeleted', data);
+    socket.on('deleteCards', function(){
+        socket.broadcast.emit('onCardsDeleted');
+    });
+
+    socket.on('onToggle', function (val) {
+        socket.broadcast.emit('onToggle', val);
     });
 });
      
