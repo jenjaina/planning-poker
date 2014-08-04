@@ -42,7 +42,7 @@ app.controller("MainCtrl", function ($scope, socket) {
     })
     
     // Outgoing
-    $scope.createCard = function(data) {
+    $scope.createCard = function (data) {
         $scope.cardchoices.push(data);
         $scope.showMessage = true;
         socket.emit('createCard', data);
