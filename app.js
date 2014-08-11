@@ -7,7 +7,7 @@ var express = require('express'),
 
 var port = process.env.PORT;
      
-app.use(express.static(__dirname)); // + '/public'));
+app.use(express.static(__dirname + '/site')); // + '/public'));
 
 io.sockets.on('connection', function(socket) {
     socket.on('createCard', function (data) {
