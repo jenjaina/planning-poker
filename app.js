@@ -4,6 +4,8 @@ var express = require('express'),
     app = express(),
     server = require('http').createServer(app),
     io = require('socket.io').listen(server);
+
+var port = process.env.PORT;
      
 app.use(express.static(__dirname)); // + '/public'));
 
@@ -34,4 +36,4 @@ io.sockets.on('connection', function(socket) {
 });
      
 // A.3
-server.listen(1337);
+server.listen(port);
