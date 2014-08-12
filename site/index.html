@@ -29,10 +29,10 @@
                         <label>Enter your name: </label>
                         <input name="userName" type="text" required ng-model="data.name" />
                         <button class="btn btn-danger" 
-                                ng-disabled="!params.leader && params.leaderchosen"
+                                ng-hide="!params.leader && params.leaderchosen"
                                 ng-click="setLeader()">I'm the leader!</button> 
                         <button class="btn btn-warning" 
-                                ng-disabled="!params.leader && params.leaderchosen"
+                                ng-hide="!params.leader && params.leaderchosen"
                                 ng-click="resetLeader()">Give up your power</button>
                     </div>
                 </div>
