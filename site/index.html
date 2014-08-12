@@ -90,10 +90,16 @@
     </div>
 
     <div id="cardsPanel" class="col-xs-7">
-        <div class="panel panel-default" ng-hide="params.togglestart">
+        <div class="panel panel-default">
             <div class="panel-heading">
-                <h3>
-                    The Votes Are In... 
+                <h3 ng-hide="params.togglestart">
+                    The Votes Are In...
+                    <span class="label label-primary pull-right">
+                        {{ cardchoices.length }} Votes
+                    </span>
+                </h3>
+                <h3 ng-show="params.togglestart">
+                    Voting in Progress...
                     <span class="label label-primary pull-right">
                         {{ cardchoices.length }} Votes
                     </span>
@@ -102,13 +108,13 @@
         </div>
 
 
-        <div class="row" ng-hide="params.togglestart">
+        <div class="row">
             <div class="col-xs-3" ng-repeat="choice in cardchoices">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <h4 class="panel-title">{{choice.name}}</h4>
                     </div>
-                    <div class="panel-body">
+                    <div class="panel-body" ng-hide="params.togglestart">
                         <h3 class="">{{choice.card}}</h3>
                     </div>
                 </div>
