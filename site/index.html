@@ -50,11 +50,11 @@
                         <textarea name="project" cols="40" rows="5" class="form-control"
                                   ng-model="newtask"></textarea>
                     </div>
-                    <span class="input-group-btn">
-                        <button class="btn btn-info" ng-click="changeTask(newtask)">
+                    <div class="btn-group"> 
+                        <button type="button" class="btn btn-info" ng-click="changeTask(newtask)">
                             Change Task
                         </button>
-                        <button class="btn btn-success pull-right" type="button"
+                        <button type="button" class="btn btn-success pull-right"
                                 ng-click="toggle(false)">
                             Reveal
                         </button>
@@ -62,7 +62,7 @@
                                 ng-click="toggle(true)">
                             Start
                         </button>
-                    </span>
+                    </div>
                 </div>
             </form>
         </div>
