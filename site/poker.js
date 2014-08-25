@@ -1,7 +1,7 @@
 // JavaScript source code
 // function () {
 
-var cards = [0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100, "?", "coffee cup"];
+var cards = [0, 0.5, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, "?", "coffee cup"];
 
 var app = angular.module("PokerApp", ["socketService"]);
 
