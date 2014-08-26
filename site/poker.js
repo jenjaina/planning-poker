@@ -11,6 +11,7 @@ app.controller("MainCtrl", function ($scope, socket) {
     $scope.params = {
         currenttask: "",
         togglestart: true,
+        cardavg: 0.0,
         leaderchosen: false,
         leader: false
     };
@@ -22,11 +23,16 @@ app.controller("MainCtrl", function ($scope, socket) {
 
     socket.on('onCardsDeleted', function () {
         $scope.cardchoices = [];
+        $scope.params.cardavg = 0.0;
         $scope.showMessage = false;
     });
 
     socket.on('onToggle', function (val) {
         $scope.params.togglestart = val;
+
+        if (!val) {
+            $scope.params.cardavg = $scope.calcAvg();
+        }
     });
 
     socket.on('onTaskChanged', function (val) {
@@ -50,12 +56,18 @@ app.controller("MainCtrl", function ($scope, socket) {
 
     $scope.deleteCards = function () {
         $scope.cardchoices = [];
+        $scope.params.cardavg = 0.0;
         $scope.showMessage = false;
         socket.emit('deleteCards');
     };
 
     $scope.toggle = function (val) {
         $scope.params.togglestart = val;
+
+        if (!val) {
+            $scope.params.cardavg = $scope.calcAvg();
+        }
+
         socket.emit('onToggle', val);
     };
 
@@ -74,6 +86,19 @@ app.controller("MainCtrl", function ($scope, socket) {
         $scope.params.leader = false;
         $scope.params.leaderchosen = false;
         socket.emit('resetLeader');
+    };
+
+    $scope.calcAvg = function (data) {
+        count = 0;
+        total = 0;
+        angular.forEach($scope.cardchoices, function(choice) {
+            if (angular.isNumber(choice.card)) {
+                count += 1;
+                total += choice.card;
+            }
+        })
+
+        return (total / count);
     };
 });
 
