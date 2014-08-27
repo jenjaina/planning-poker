@@ -120,7 +120,7 @@
                         </select>
                         <p class="pull-right">You've selected: {{data.card || "None"}}</p>
                     </div>
-                    <button id="createButton" class="btn btn-primary" type="submit" ng-disabled="showMessage || (cardform.$invalid && userForm.$invalid)">
+                    <button id="createButton" class="btn btn-primary" type="submit" ng-disabled="showMessage || (cardform.$invalid || userForm.$invalid)">
                         Submit Your Estimate
                     </button>
                     <p class="error" style="color: darkgreen; font-weight: bold"
