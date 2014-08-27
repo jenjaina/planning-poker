@@ -10,6 +10,7 @@ app.controller("MainCtrl", function ($scope, socket) {
     $scope.cardoptions = cards;
     $scope.params = {
         currenttask: "",
+        scalechoice: "false",
         togglestart: true,
         cardavg: 0.0,
         leaderchosen: false,
@@ -37,6 +38,10 @@ app.controller("MainCtrl", function ($scope, socket) {
 
     socket.on('onTaskChanged', function (val) {
         $scope.params.currenttask = val;
+    });
+
+    socket.on('onCardsChanged', function (data) {
+        $scope.cardoptions = $scope.parseCards(data);
     });
 
     socket.on('onLeaderSet', function () {
@@ -76,6 +81,11 @@ app.controller("MainCtrl", function ($scope, socket) {
         socket.emit('onTaskChanged', data);
     };
 
+    $scope.changeCards = function (data) {
+        $scope.cardoptions = $scope.parseCards(data);
+        socket.emit('onCardsChanged', data);
+    }
+
     $scope.setLeader = function () {
         $scope.params.leader = true;
         $scope.params.leaderchosen = true;
@@ -99,6 +109,30 @@ app.controller("MainCtrl", function ($scope, socket) {
         })
 
         return (total / count);
+    };
+
+    $scope.parseCards = function (data) {
+        cardarray = [];
+        re = /\s*,\s*/;
+
+        if (angular.isDefined(data) && angular.isString(data)) {
+            values = angular.lowercase(data).split(re);
+            angular.forEach(values, function (val) {
+                if (parseInt(val)) {
+                    cardarray.push(parseInt(val));
+                } else {
+                    cardarray.push(val);
+                }
+            })
+            $scope.scaleMessage = "Scale changed successfully";
+            return cardarray;
+        } else if (angular.isDefined(data) && data === cards) {
+            $scope.scaleMessage = "Using Fibonacci scale";
+            return cards;
+        } else {
+            $scope.scaleMessage = "Invalid entry";
+            return cards;
+        }
     };
 });
 
