@@ -26,6 +26,10 @@ io.sockets.on('connection', function(socket) {
         socket.broadcast.emit('onTaskChanged', val);
     });
 
+    socket.on('onCardsChanged', function (data) {
+        socket.broadcast.emit('onCardsChanged', data);
+    })
+
     socket.on('setLeader', function () {
         socket.broadcast.emit('onLeaderSet');
     });
