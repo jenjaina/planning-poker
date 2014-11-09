@@ -6,7 +6,6 @@
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="angular.js"></script>
-    <script src="../app.js"></script>
     <script src="service.js"></script>
     <script src="poker.js"></script>
     <link href="bootstrap.css" rel="stylesheet" />
@@ -28,17 +27,20 @@
                     <div class="form-group">
                         <label>Enter your name: </label>
                         <input name="userName" type="text" required ng-model="data.name" />
-                        <button class="btn btn-danger" 
+                        <button class="btn btn-danger"
                                 ng-hide="!params.leader && params.leaderchosen"
-                                ng-click="setLeader()">I'm the leader!</button> 
-                        <button class="btn btn-warning" 
+                                ng-click="setLeader()">I'm the leader!</button>
+                        <button class="btn btn-warning"
                                 ng-hide="!params.leader && params.leaderchosen"
                                 ng-click="resetLeader()">Give up your power</button>
                     </div>
                 </div>
             </form>
             <div class="panel-body">
-                <p>The task being evaluated is: {{params.currenttask || "None"}}</p>
+                <p>The task being evaluated is: </p>
+                <blockquote>
+                  <span ng-repeat-start="line in (params.currenttask || 'None.') | getLines">{{line}}</span><br ng-repeat-end>
+                </blockquote>
             </div>
         </div>
 
