@@ -50,8 +50,8 @@ app.controller("MainCtrl", function ($scope, socket) {
 
     socket.on('onLeaderReset', function () {
         $scope.params.leaderchosen = false;
-    })
-    
+    });
+
     // Outgoing
     $scope.createCard = function (data) {
         $scope.cardchoices.push(data);
@@ -84,7 +84,7 @@ app.controller("MainCtrl", function ($scope, socket) {
     $scope.changeCards = function (data) {
         $scope.cardoptions = $scope.parseCards(data);
         socket.emit('onCardsChanged', data);
-    }
+    };
 
     $scope.setLeader = function () {
         $scope.params.leader = true;
@@ -134,6 +134,12 @@ app.controller("MainCtrl", function ($scope, socket) {
             return cards;
         }
     };
+});
+
+app.filter('getLines', function() {
+  return function(input) {
+    return input.split('\n');
+  }
 });
 
 // })();
