@@ -49,9 +49,12 @@
                 <h3>You are the leader!</h3>
             </div>
             <div class="panel-body">
-                <p>You are in control of setting the task to be estimated, starting the voting process, revealing everyone's estimations, and resetting the votes to begin again.</p>
-                <p>Type in the task that your team will vote on and click 'Change Task'. Then, click Start to open up voting. The team should now submit their estimations. Once the votes are in, click Reveal and each user's estimation will be shown, as well as the average score. To revote, click Start again. Or, to start another task, repeat from the beginning of these instructions.</p>
-                <p>By default, the estimation choices are set to the Fibonacci scale. If you would like to enter your own custom scale, click yes.</p>
+                <a ng-click="params.showInstructions = !params.showInstructions">{{params.showInstructions && 'Hide' || 'Instructions'}}</a>
+                <div ng-show='params.showInstructions'>
+                    <p>You are in control of setting the task to be estimated, starting the voting process, revealing everyone's estimations, and resetting the votes to begin again.</p>
+                    <p>Type in the task that your team will vote on and click 'Change Task'. Then, click Start to open up voting. The team should now submit their estimations. Once the votes are in, click Reveal and each user's estimation will be shown, as well as the average score. To revote, click Start again. Or, to start another task, repeat from the beginning of these instructions.</p>
+                    <p>By default, the estimation choices are set to the Fibonacci scale. If you would like to enter your own custom scale, click yes.</p>
+                </div>
 
                 <form name="scaleForm" novalidate>
                     <em>Enter custom scale?</em>
