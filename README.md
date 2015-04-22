@@ -17,11 +17,11 @@ Next, start the server by typing:
   
 then:
 
-```node app.js```
+```PORT=1337 node app.js```
 
 ## How to run the app
 
-Once the server is running, open the app in your browser by navigating to: localhost:1337/poker.html
+Once the server is running, open the app in your browser by navigating to: localhost:1337
 
 You can open multiple tabs to see how multiple users can submit their estimations and view the results.
 
