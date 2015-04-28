@@ -14,7 +14,8 @@ app.controller("MainCtrl", function ($scope, socket) {
         togglestart: true,
         cardavg: 0.0,
         leaderchosen: false,
-        leader: false
+        leader: false,
+        showInstructions: false
     };
 
     // Incoming
