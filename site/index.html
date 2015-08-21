@@ -1,176 +1,191 @@
 ﻿<!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" ng-app="PokerApp">
 <head>
-    <meta charset="utf-8" />
-    <title>Estimation Lottery</title>
+  <meta charset="utf-8" />
+  <title>Estimation Lottery</title>
 
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="angular.js"></script>
-    <script src="service.js"></script>
-    <script src="poker.js"></script>
-    <link href="bootstrap.css" rel="stylesheet" />
-    <link href="bootstrap-theme.css" rel="stylesheet" />
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="angular.js"></script>
+  <script src="service.js"></script>
+  <script src="bundle.js"></script>
+  <link href="bootstrap.css" rel="stylesheet" />
+  <link href="bootstrap-theme.css" rel="stylesheet" />
 </head>
 <body ng-controller="MainCtrl">
-    <div class="jumbotron">
-        <h1 class="text-center">JRS Estimation Lottery</h1>
+  <div class="jumbotron">
+    <h1 class="text-center">JRS Estimation Lottery</h1>
+  </div>
+
+  <div id="dataSubmissions" class="col-xs-5">
+    <div id="namePanel" class="panel panel-default">
+      <div class="panel-heading">
+        <h3 ng-hide="data.name">Welcome!</h3>
+        <h3 ng-show="data.name">Welcome, {{data.name}}!</h3>
+      </div>
+      <form name="userForm" novalidate ng-show="true">
+        <div class="well">
+          <div class="form-group">
+            <label>Enter your name: </label>
+            <input name="userName" type="text" required ng-model="data.name" />
+            <button class="btn btn-primary" ng-click="addUser(data.name)">I'm here!</button>
+            <button class="btn btn-danger" ng-hide="!params.leader && params.leaderchosen" ng-click="setLeader()">I'm the leader!</button>
+            <button class="btn btn-warning" ng-hide="!params.leader && params.leaderchosen" ng-click="resetLeader()">Give up your power</button>
+          </div>
+        </div>
+      </form>
+      <div class="panel-body">
+        <p>The task being evaluated is: </p>
+        <blockquote>
+          <span ng-repeat-start="line in (params.currenttask || 'None.') | getLines">{{line}}</span><br ng-repeat-end>
+        </blockquote>
+      </div>
     </div>
 
-    <div id="dataSubmissions" class="col-xs-5">
-        <div id="namePanel" class="panel panel-default">
-            <div class="panel-heading">
-                <h3 ng-hide="data.name">Welcome!</h3>
-                <h3 ng-show="data.name">Welcome, {{data.name}}!</h3>
-            </div>
-            <form name="userForm" novalidate ng-show="true">
-                <div class="well">
-                    <div class="form-group">
-                        <label>Enter your name: </label>
-                        <input name="userName" type="text" required ng-model="data.name" />
-                        <button class="btn btn-danger"
-                                ng-hide="!params.leader && params.leaderchosen"
-                                ng-click="setLeader()">I'm the leader!</button>
-                        <button class="btn btn-warning"
-                                ng-hide="!params.leader && params.leaderchosen"
-                                ng-click="resetLeader()">Give up your power</button>
-                    </div>
-                </div>
-            </form>
-            <div class="panel-body">
-                <p>The task being evaluated is: </p>
-                <blockquote>
-                  <span ng-repeat-start="line in (params.currenttask || 'None.') | getLines">{{line}}</span><br ng-repeat-end>
-                </blockquote>
-            </div>
+    <div id="taskPanel" class="panel panel-default" ng-show="params.leader">
+      <div class="panel-heading">
+        <h3>You are the leader!</h3>
+      </div>
+      <div class="panel-body">
+        <a ng-click="params.showInstructions = !params.showInstructions">{{params.showInstructions && 'Hide' || 'Instructions'}}</a>
+        <div ng-show='params.showInstructions'>
+          <p>You are in control of setting the task to be estimated, starting the voting process, revealing everyone's estimations, and resetting the votes to begin again.</p>
+          <p>Type in the task that your team will vote on and click 'Change Task'. Then, click Start to open up voting. The team should now submit their estimations. Once the votes are in, click Reveal and each user's estimation will be shown, as well as the average score. To revote, click Start again. Or, to start another task, repeat from the beginning of these instructions.</p>
+          <p>By default, the estimation choices are set to the Fibonacci scale. If you would like to enter your own custom scale, click yes.</p>
         </div>
 
-        <div id="taskPanel" class="panel panel-default" ng-show="params.leader">
-            <div class="panel-heading">
-                <h3>You are the leader!</h3>
+        <form name="scaleForm" novalidate>
+          <em>Enter custom scale?</em>
+          <div class="btn-group pull-right">
+            <input type="radio" ng-model="params.scalechoice" value="true">Yes
+            <input type="radio" ng-model="params.scalechoice" value="false">No
+          </div>
+          <br />
+          <div class="well" ng-show="params.scalechoice">
+            <div class="form-group">
+              <label>Enter your custom scale: </label>
+              <input name="customscale" type="text" required ng-model="data.customscale" />
             </div>
-            <div class="panel-body">
-                <a ng-click="params.showInstructions = !params.showInstructions">{{params.showInstructions && 'Hide' || 'Instructions'}}</a>
-                <div ng-show='params.showInstructions'>
-                    <p>You are in control of setting the task to be estimated, starting the voting process, revealing everyone's estimations, and resetting the votes to begin again.</p>
-                    <p>Type in the task that your team will vote on and click 'Change Task'. Then, click Start to open up voting. The team should now submit their estimations. Once the votes are in, click Reveal and each user's estimation will be shown, as well as the average score. To revote, click Start again. Or, to start another task, repeat from the beginning of these instructions.</p>
-                    <p>By default, the estimation choices are set to the Fibonacci scale. If you would like to enter your own custom scale, click yes.</p>
-                </div>
-
-                <form name="scaleForm" novalidate>
-                    <em>Enter custom scale?</em>
-                    <div class="btn-group pull-right">
-                        <input type="radio" ng-model="params.scalechoice" value="true">Yes
-                        <input type="radio" ng-model="params.scalechoice" value="false">No
-                    </div>
-                    <br />
-                    <div class="well" ng-show="params.scalechoice">
-                        <div class="form-group">
-                            <label>Enter your custom scale: </label>
-                            <input name="customscale" type="text" required ng-model="data.customscale" />
-                        </div>
-                        <p>Separate each choice with commas (ex: <strong>1,2,3</strong> or <strong>5, 10, 20, need a break</strong>)</p>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-info" ng-click="changeCards(data.customscale)">
-                                Submit new scale
-                            </button>
-                        </div>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-info" ng-click="changeCards(cards)">
-                                Default scale
-                            </button>
-                        </div>
-                        <p class="error" style="color: darkgreen; font-weight: bold" ng-show="scaleMessage">{{scaleMessage}}</p>
-                    </div>
-                </form>
-                <br />
-
-                <form name="estimateForm" novalidate ng-submit="deleteCards()">
-                    <div class="well">
-                        <div class="form-group">
-                            <label>Enter a New Task: </label>
-                            <textarea name="project" cols="40" rows="5" class="form-control"
-                                      ng-model="newtask"></textarea>
-                        </div>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-info" ng-click="changeTask(newtask)">
-                                Change Task
-                            </button>
-                        </div>
-                        <div class="btn-group pull-right">
-                            <button type="button" class="btn btn-success"
-                                    ng-click="toggle(false)">
-                                Reveal
-                            </button>
-                        </div>
-                        <div class="btn-group pull-right">
-                            <button class="btn btn-success" type="submit"
-                                    ng-click="toggle(true)">
-                                Start
-                            </button>
-                        </div>
-                    </div>
-                </form>
+            <p>Separate each choice with commas (ex: <strong>1,2,3</strong> or <strong>5, 10, 20, need a break</strong>)</p>
+            <div class="btn-group">
+              <button type="button" class="btn btn-info" ng-click="changeCards(data.customscale)">
+                  Submit new scale
+              </button>
             </div>
-        </div>
-
-        <div id="estimatePanel" class="panel" ng-show="params.togglestart">
-            <div class="well">
-                <form name="cardform" novalidate ng-submit="createCard(data)"
-                      ng-class="showMessage ? 'validate' : ''">
-                    <div class="form-group">
-                        <label for="cardSelection">Your Estimate: </label>
-                        <select id="cardSelection" ng-model="data.card"
-                                ng-options="card for card in cardoptions" required>
-                            <option value="">(Pick One)</option>
-                        </select>
-                        <p class="pull-right">You've selected: {{data.card || "None"}}</p>
-                    </div>
-                    <button id="createButton" class="btn btn-primary" type="submit" ng-disabled="showMessage || (cardform.$invalid || userForm.$invalid)">
-                        Submit Your Estimate
-                    </button>
-                    <p class="error" style="color: darkgreen; font-weight: bold"
-                       ng-show="showMessage">Submitted!</p>
-                </form>
+            <div class="btn-group">
+              <button type="button" class="btn btn-info" ng-click="changeCards(cards)">
+                  Default scale
+              </button>
             </div>
-        </div>
+            <p class="error" style="color: darkgreen; font-weight: bold" ng-show="scaleMessage">{{scaleMessage}}</p>
+          </div>
+        </form>
+        <br />
+
+        <form name="estimateForm" novalidate ng-submit="deleteCards()">
+          <div class="well">
+            <div class="form-group">
+              <label>Enter a New Task: </label>
+              <textarea name="project" cols="40" rows="5" class="form-control" ng-model="newtask"></textarea>
+            </div>
+            <div class="btn-group">
+              <button type="button" class="btn btn-info" ng-click="changeTask(newtask)">
+                  Change Task
+              </button>
+            </div>
+            <div class="btn-group pull-right">
+              <button type="button" class="btn btn-success" ng-click="toggle(false)">
+                  Reveal
+              </button>
+            </div>
+            <div class="btn-group pull-right">
+              <button class="btn btn-success" type="submit" ng-click="toggle(true)">
+                  Start
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
 
-    <div id="cardsPanel" class="col-xs-7">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 ng-hide="params.togglestart">
-                    The Votes Are In...
-                    <span class="label label-primary pull-right">
-                        {{ cardchoices.length }} Votes
-                    </span>
-                </h3>
-                <h3 ng-show="params.togglestart">
-                    Voting in Progress...
-                    <span class="label label-primary pull-right">
-                        {{ cardchoices.length }} Votes
-                    </span>
-                </h3>
-            </div>
-            <div class="panel-body" ng-hide="params.togglestart">
-                <h3>
-                    Average Estimate: {{ params.cardavg | number:2 }}
-                </h3>
-            </div>
-        </div>
+    <div id="estimatePanel" class="panel" ng-show="params.togglestart">
+      <div class="well">
+        <form name="cardform" novalidate ng-submit="createCard(data)" ng-class="showMessage ? 'validate' : ''">
+          <div class="form-group">
+            <label for="cardSelection">Your Estimate: </label>
+            <select id="cardSelection" ng-model="data.card" ng-options="card for card in cardoptions" required>
+                <option value="">(Pick One)</option>
+            </select>
+            <p class="pull-right">You've selected: {{data.card || "None"}}</p>
+          </div>
+          <button id="createButton" class="btn btn-primary" type="submit" ng-disabled="showMessage || (cardform.$invalid || userForm.$invalid)">
+              Submit Your Estimate
+          </button>
+          <p class="error" style="color: darkgreen; font-weight: bold" ng-show="showMessage">Submitted!</p>
+        </form>
+      </div>
+    </div>
+  </div>
 
-
+  <div id="usersPanel" class="col-xs-7">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3>Current Users
+          <span class="label label-primary pull-right">
+            {{ currentUsers.length }} People Estimating
+          </span>
+        </h3>
+      </div>
+      <div class="panel-body">
         <div class="row">
-            <div class="col-xs-3" ng-repeat="choice in cardchoices">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">{{choice.name}}</h4>
-                    </div>
-                    <div class="panel-body" ng-hide="params.togglestart">
-                        <h3 class="">{{choice.card}}</h3>
-                    </div>
-                </div>
+          <div class="col-xs-3" ng-repeat="user in currentUsers">
+            <div class="panel panel-success">
+              <div class="panel-heading">
+                <h4 class="panel-title">{{user}}</h4>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
+
+  <div id="cardsPanel" class="col-xs-7">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 ng-hide="params.togglestart">
+          The Votes Are In...
+          <span class="label label-primary pull-right">
+            {{ cardchoices.length }} Votes
+          </span>
+        </h3>
+        <h3 ng-show="params.togglestart">
+          Voting in Progress...
+          <span class="label label-primary pull-right">
+            {{ cardchoices.length }} Votes
+          </span>
+        </h3>
+      </div>
+      <div class="panel-body" ng-hide="params.togglestart">
+        <h3>
+          Average Estimate: {{ params.cardavg | number:2 }}
+        </h3>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="col-xs-3" ng-repeat="choice in cardchoices">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h4 class="panel-title">{{choice.name}}</h4>
+          </div>
+          <div class="panel-body" ng-hide="params.togglestart">
+            <h3 class="">{{choice.card}}</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
