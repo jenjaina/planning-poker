@@ -11,10 +11,10 @@ Welcome! This app is designed to allow a software development team to play "Plan
 
 Clone the repository, open a command line/terminal, and cd into the directory.
 
-Next, start the server by typing:
+Next, start the server by typing in console:
 
 ```npm install```
-  
+
 then:
 
 ```PORT=1337 node app.js```
