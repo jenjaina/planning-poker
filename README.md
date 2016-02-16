@@ -11,7 +11,7 @@ Welcome! This app is designed to allow a software development team to play "Plan
 
 Clone the repository, open a command line/terminal, and cd into the directory.
 
-Next, start the server by typing in console:
+Next, start the server by typing:
 
 ```npm install```
 
@@ -25,5 +25,10 @@ Once the server is running, open the app in your browser by navigating to: local
 
 You can open multiple tabs to see how multiple users can submit their estimations and view the results.
 
+## How to deploy the app
+
+To rebundle:
+
+```browserify site/poker.js > site/bundle.js```
 
 Thanks for viewing!
