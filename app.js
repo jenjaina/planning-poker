@@ -1,12 +1,11 @@
 // app.js
 
-var express = require('express'),
-    app = express(),
-    server = require('http').createServer(app),
-    io = require('socket.io').listen(server),
-    _ = require('underscore');
+const express = require('express');
+const app = express();
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
 
-var port = process.env.PORT;
+let port = process.env.PORT;
 
 app.use(express.static(__dirname + '/site')); // + '/public'));
 
